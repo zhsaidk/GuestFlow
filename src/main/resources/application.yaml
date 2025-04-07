@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: GuestFlow
+  datasource:
+    url: jdbc:sqlite:./guestFlow.db
+    driverClassName: org.sqlite.JDBC
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: validate
