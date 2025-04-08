@@ -8,3 +8,5 @@ spring:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
       ddl-auto: validate
+  config:
+    import: env.yaml

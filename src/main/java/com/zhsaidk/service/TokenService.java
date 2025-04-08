@@ -4,13 +4,12 @@ import com.zhsaidk.database.entity.Token;
 import com.zhsaidk.database.entity.User;
 import com.zhsaidk.database.repo.TokenRepository;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -22,10 +21,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TokenService {
-    private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 10;  // 15 минут
-    private static final long REFRESH_TOKEN_EXPIRATION = 1000 * 60;  // 24 часа
-    private static final String SECRET = "803311c924c081e3b90fe9c5e233e418c3e4885d1c888383dd3094a9ba78347e";
-    private static final String ISSUER = "GuestFlow";
+    @Value("${ACCESS_TOKEN_EXPIRATION}")
+    private final Integer ACCESS_TOKEN_EXPIRATION;  // 15 минут
+    @Value("${REFRESH_TOKEN_EXPIRATION}")
+    private final Integer REFRESH_TOKEN_EXPIRATION;  // 24 часа
+    @Value("${JWT_SECRET}")
+    private final String SECRET;
+    @Value("${ISSUER}")
+    private final String ISSUER;
 
     private final TokenRepository tokenRepository;
     private SecretKey secretKey;
@@ -71,11 +74,7 @@ public class TokenService {
                 .build();
     }
 
-    public void save(Token token) {
-        tokenRepository.save(token);
-    }
-
-    public Optional<Token> findByRefreshToken(String token){
+    public Optional<Token> findByRefreshToken(String token) {
         return tokenRepository.findTokenByRefreshToken(token);
     }
 }
